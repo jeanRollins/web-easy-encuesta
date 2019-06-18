@@ -90,8 +90,18 @@ window.addEventListener('load', function(){
 
   document.querySelector('#btnAddEncuesta').addEventListener( 'click' , function( e ){
     e.preventDefault();
+    var largoEncuestaTemporal = parseInt(document.querySelector('#largoEncuestaTemporal').value) ;
+    var inputAddEncuesta = parseInt( document.querySelector('#inputAddEncuesta').value ) ;
+    var largoTotal = largoEncuestaTemporal + inputAddEncuesta ;
+    document.querySelector('#largoEncuestaTemporal').value = largoTotal ;
 
-    console.log( sumarValorInputEncuesta() );
+    for (;;) {
+      largoEncuestaTemporal++ ;
+
+      createInputs( largoEncuestaTemporal );
+
+      if( largoEncuestaTemporal == largoTotal ){  break; }
+    }
 
 
   });
@@ -99,6 +109,8 @@ window.addEventListener('load', function(){
 
 
 });
+
+
 
 function sumarValorInputEncuesta()
 {
@@ -133,10 +145,9 @@ function createInputs( i ){
       <option value="5">5</option>
     </select>
     <p id="messageResponseLargoRespuesta${i}" style="display:none;color:red;">Debe agregar un largo.</p>
-  </div>
-  `;
+  </div>`;
   input.appendChild(element) ;
-  input.style.display = 'none';
+
 }
 
 // Recorrer class de los botones
@@ -165,11 +176,13 @@ function GetEncuesta( idEncuesta )
     document.querySelector('#select_largo_encuesta').value = data.encuestaResponse.largo_encuesta ;
     document.querySelector('#selectTipoEncuesta').selectedIndex = data.encuestaResponse.tipo_encuesta ;
     document.querySelector('#nameEncuesta').value = data.encuestaResponse.name_encuesta ;
+    console.log( 'data.encuestaResponse.largo_encuesta: ' + data.encuestaResponse.largo_encuesta );
     document.querySelector('#largoEncuestaTemporal').value = data.encuestaResponse.largo_encuesta ;
 
     var largoEncuesta = parseInt( data.encuestaResponse.largo_encuesta ) ;
     console.log( data.encuestaPregunta ) ;
     instanceInputs( largoEncuesta ) ;
+    input.style.display = 'none';
     for ( var i = 0 ; i < largoEncuesta ; i++ ) {
       document.querySelector('#preguntaText' + ( i + 1 ) ).value = data.encuestaPregunta[i].name_pregunta ;
       document.querySelector('#largoRespuesta' + ( i + 1 ) ).selectedIndex = parseInt(data.encuestaPregunta[i].largo_pregunta) - 1  ;
