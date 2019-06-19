@@ -8,10 +8,8 @@ window.addEventListener('load', function(){
       tableEncuestaEdit.style.display = 'none'  ;
       formEncuestaEdit.style.display  = 'block' ;
       GetEncuesta( this.dataset.id ) ;
-
     });
   }
-
 
   const buttonsDelete = document.querySelectorAll(".deleteEncuestaClass");
   for (const button of buttonsDelete) {
@@ -93,24 +91,136 @@ window.addEventListener('load', function(){
     var largoEncuestaTemporal = parseInt(document.querySelector('#largoEncuestaTemporal').value) ;
     var inputAddEncuesta = parseInt( document.querySelector('#inputAddEncuesta').value ) ;
     var largoTotal = largoEncuestaTemporal + inputAddEncuesta ;
-    document.querySelector('#largoEncuestaTemporal').value = largoTotal ;
 
-    for (;;) {
-      largoEncuestaTemporal++ ;
-
-      createInputs( largoEncuestaTemporal );
-
-      if( largoEncuestaTemporal == largoTotal ){  break; }
+    if( isNaN( inputAddEncuesta ) ){
+      document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'none'; } , 5000 );
+      return false;
     }
 
+    if( inputAddEncuesta < 1 ){
+      document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'none'; } , 5000 );
+      return false;
+    }
+    if( inputAddEncuesta == 0 || inputAddEncuesta == '' ){
+      document.querySelector('#messageAlertAddEncuestaVacio').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuestaVacio').style.display = 'none'; } , 5000 );
+      return false;
+    }
+    document.querySelector('#largoEncuestaTemporal').value = largoTotal ;
+    for (;;) {
+      largoEncuestaTemporal++ ;
+      createInputs( largoEncuestaTemporal ) ;
+      if( largoEncuestaTemporal > 0 ) { enableElement( 'btnDeleteEncuesta' ) ; }
 
+      if( largoEncuestaTemporal == largoTotal ) { break; }
+    }
   });
 
+  document.querySelector('#btnDeleteEncuesta').addEventListener( 'click' , function(e){
+    var largoEncuestaTemporal = parseInt(document.querySelector('#largoEncuestaTemporal').value) ;
+    var inputAddEncuesta  = parseInt( document.querySelector('#inputAddEncuesta').value ) ;
+    var largoTotalRestado = largoEncuestaTemporal - inputAddEncuesta ;
 
+    if( isNaN( inputAddEncuesta ) ){
+      document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'none'; } , 5000 );
+      return false;
+    }
+
+    if( inputAddEncuesta == 0 || inputAddEncuesta == '' ){
+      document.querySelector('#messageAlertAddEncuestaVacio').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuestaVacio').style.display = 'none'; } , 5000 );
+      return false;
+    }
+
+    if( inputAddEncuesta < 1 ){
+      document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuestaMenorCero').style.display = 'none'; } , 5000 );
+      return false;
+    }
+
+    console.log( 'largoEncuestaTemporal: ' + largoEncuestaTemporal );
+    console.log( 'largoTotalRestado: ' + largoTotalRestado );
+    console.log('______________________');
+
+    if( largoTotalRestado < 0 ){
+      document.querySelector('#messageAlertAddEncuesta').style.display = 'block' ;
+      setTimeout( function(){ document.querySelector('#messageAlertAddEncuesta').style.display = 'none'; } , 5000 );
+      return false;
+    }
+    document.querySelector('#largoEncuestaTemporal').value = largoTotalRestado ;
+
+    for(;;){
+      document.querySelector('#form-pregunta' + largoEncuestaTemporal ).remove() ;
+      document.querySelector('#form-respuesta' + largoEncuestaTemporal ).remove() ;
+      console.log( 'largoEncuestaTemporal: ' + largoEncuestaTemporal );
+      largoEncuestaTemporal-- ;
+      if( largoEncuestaTemporal < 1){
+        disableElement('btnDeleteEncuesta');
+      }
+      else{
+        enableElement( 'btnDeleteEncuesta' ) ;
+      }
+      if( largoEncuestaTemporal == largoTotalRestado ){  break ; }
+    }
+  });
+  document.querySelector('#btnEncuestaForm').addEventListener( 'click' , function(e){
+    //this.style.display = 'none';
+    e.preventDefault();
+    var nameEncuesta  = document.querySelector('#nameEncuesta') ;
+    var selectTipoEncuesta  = document.querySelector('#selectTipoEncuesta') ;
+    var largoEncuesta = parseInt( document.querySelector('#largoEncuestaTemporal').value ) ;
+    enableElement( 'select_largo_encuesta' );
+    document.querySelector('#select_largo_encuesta_old').value = document.querySelector('#select_largo_encuesta').value ;
+
+    document.querySelector('#select_largo_encuesta').value = largoEncuesta ;
+
+    for (var i = 0 ; i < largoEncuesta ; i++) {
+      if( document.querySelector('#preguntaText'+ ( i + 1 ) ).value == '' )
+      {
+        document.querySelector('#messageResponsePregunta'+ ( i + 1 ) ).style.display = 'block' ;
+        setTimeout( function(){ document.querySelector('#messageResponsePregunta'+ ( i + 1 ) ).style.display = 'none'; } , 4000 );
+        document.querySelector('#messageResponsePregunta'+ ( i + 1 ) ).focus();
+        return false ;
+        break;
+      }
+
+      if( document.querySelector('#largoRespuesta'+ ( i + 1 ) ).value == '0' )
+      {
+        document.querySelector('#messageResponseLargoRespuesta'+ ( i + 1 ) ).style.display = 'block' ;
+        setTimeout( function(){ document.querySelector('#messageResponseLargoRespuesta' + ( i + 1 ) ).style.display = 'none'; } , 4000 );
+        document.querySelector('#messageResponseLargoRespuesta'+ ( i + 1 ) ).focus() ;
+        return false ;
+        break ;
+      }
+    }
+
+    formEditEncuesta = document.querySelector("#formEditEncuesta") ;
+    var form = new FormData( formEditEncuesta ) ;
+
+    url = formEditEncuesta.getAttribute('action') ; //obtiene el atributo action;
+    console.log( url );
+
+    fetch( url ,{
+      method : 'POST',
+      body   : form
+    })
+    .then( res  => res.text() )
+    .then( data => {
+      console.log( data ) ;
+    })
+  });
 
 });
 
-
+function disableElement( element ){
+  document.querySelector( '#' + element ).disabled = true ;
+}
+function enableElement( element ){
+  document.querySelector( '#' + element ).disabled = false ;
+}
 
 function sumarValorInputEncuesta()
 {
@@ -130,12 +240,12 @@ function createInputs( i ){
   var element = document.createElement('div');
   var input   = document.querySelector("#input");
   element.innerHTML=`
-  <div class="form-group">
+  <div class="form-group" id="form-pregunta${i}">
     <p>Pregunta ${i}</p>
     <input type="text" id="preguntaText${i}" name="preguntaText${i}"  class="form-control"/>
     <p id="messageResponsePregunta${i}" style="display:none;color:red;">Debe agregar una pregunta.</p>
   </div>
-  <div class="form-group">
+  <div class="form-group" id="form-respuesta${i}">
     <p>Cantidad Respuestas</p>
     <select id="largoRespuesta${i}" name="largoRespuesta${i}"  class="form-control">
       <option value="0">Cantidad Respuestas</option>
@@ -158,9 +268,7 @@ function GetEncuestas()
   .then( res 	=> res.json() )
   .then( data => {
     ListarEncuestas( data ) ;
-    console.log('paso1');
     LoadScript('scriptsMenus/show_encuestas');
-    console.log('paso2');
   })
 }
 
@@ -186,6 +294,9 @@ function GetEncuesta( idEncuesta )
     for ( var i = 0 ; i < largoEncuesta ; i++ ) {
       document.querySelector('#preguntaText' + ( i + 1 ) ).value = data.encuestaPregunta[i].name_pregunta ;
       document.querySelector('#largoRespuesta' + ( i + 1 ) ).selectedIndex = parseInt(data.encuestaPregunta[i].largo_pregunta) - 1  ;
+    }
+    if( largoEncuesta < 1 ){
+      disableElement('btnDeleteEncuesta') ;
     }
   })
 }
@@ -232,4 +343,14 @@ function ListarEncuestas( data )
 
   }
   bodyTableEncuestas.innerHTML = tableBody ;
+}
+
+function bloquearCaracteres(string){
+    var out = '';
+    var filtro = '1234567890';
+
+    for (var i=0; i<string.length; i++)
+       if (filtro.indexOf(string.charAt(i)) != -1)
+	     out += string.charAt(i);
+    return out;
 }

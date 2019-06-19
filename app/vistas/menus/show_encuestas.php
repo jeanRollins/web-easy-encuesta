@@ -38,7 +38,7 @@
 </div>
 
 <div class="" id="formEncuestaEdit" style="display:none;">
-  <form id="formEditEncuesta" action="<?php echo RUTA_URL; ?>encuestascontroller/updateEncuesta" method="POST">
+  <form id="formEditEncuesta" action="<?php echo RUTA_URL; ?>encuestascontroller/actualizarEncuesta" method="POST">
     <div class="row justify-content-center">
       <div class="col-md-9">
         <div class="card mt-4">
@@ -63,19 +63,23 @@
               </div>
               <div class="form-group">
                 <p>Cantidad de preguntas por Encuesta</p>
-                <input type="number" id="select_largo_encuesta" class="form-control" disabled name="" value="">
+                <input type="number" id="select_largo_encuesta" name="select_largo_encuesta" class="form-control" disabled  value="">
+                <input type="number" id="select_largo_encuesta_old" style="display:none; color:red;"  name="select_largo_encuesta_old" class="form-control"  value="">
               </div>
-              <input type="text" style="display:none;" id="largoEncuesta" value="">
+              <input type="text" style="display:none;" id="largoEncuesta"  value="">
             </div>
             <div class="form-group" id="input">
-              <input type="text" id="largoEncuestaTemporal" style="display:none;" value="">
+              <input type="text" id="largoEncuestaTemporal" name="" style="display:none;" value="">
               <div class="input-group mb-3">
-                <input type="number" id="inputAddEncuesta"  class="form-control" placeholder="Agregar o quitar respuestas" aria-label="Recipient's username with two button addons" aria-describedby="button-addon4">
+                <input type="number" id="inputAddEncuesta" onkeyup="this.value = bloquearCaracteres( this.value )" class="form-control" placeholder="Agregar o quitar respuestas" aria-label="Recipient's username with two button addons" aria-describedby="button-addon4">
                 <div class="input-group-append" id="button-addon4">
                   <button class="btn btn-primary" id="btnAddEncuesta" type="button">Agregar</button>
                   <button class="btn btn-danger" id="btnDeleteEncuesta" type="button">Quitar</button>
                 </div>
               </div>
+              <p style="display:none; color:red;" id="messageAlertAddEncuesta">No puede sacar menos preguntas de las que hay.</p>
+              <p style="display:none; color:red;" id="messageAlertAddEncuestaVacio">Debe agregar un valor en el input.</p>
+              <p style="display:none; color:red;" id="messageAlertAddEncuestaMenorCero">Debe agregar un valor mayor a cero.</p>
             </div>
             <button  id="buttonNext" class="btn btn-success btn-block">Siguiente</button>
             <p class="messa_response_fail_encuesta" style="display:none; color:red;">No se pudo agregar encuesta. Intente más tarde. </p>

@@ -121,6 +121,42 @@ Class Encuestascontroller extends Controlador{
     echo json_encode( $encuestaArr , JSON_FORCE_OBJECT ) ;
   }
 
+  private function ArrayOrderUpdate( $arr )
+  {
+    $encuestaTotal = array() ;
+    for ($i=0; $i < (int)$arr["select_largo_encuesta"] ; $i++) {
+      $encuestaTotal [] = array(
+        'selectTipoEncuesta'        => $arr['selectTipoEncuesta'] ,
+        'nameEncuesta'              => $arr['nameEncuesta'] ,
+        'select_largo_encuesta'     => $arr['select_largo_encuesta'] ,
+        'preguntaText'              => $arr["preguntaText".( $i + 1 )] ,
+        'largoRespuesta'            => $arr["largoRespuesta".( $i + 1 )],
+        'select_largo_encuesta_old' => $arr['select_largo_encuesta_old']
+      );
+    }
+    return $encuestaTotal ;
+  }
+
+  public function actualizarEncuesta()
+  {
+    $post = $this->ArrayOrderUpdate( $_POST ) ;
+    var_dump( $post ) ;
+    $encuestasInsertar = array();
+    $encuestasActualizar = array();
+    //separo en dos array uno para Actualizar y otro para isertar
+    for ( $i = 0; $i < count( $post ) ; $i++ ) {
+
+      $encuestasActualizar [] =  array(
+        'selectTipoEncuesta'        => $enc['selectTipoEncuesta'] ,
+        'nameEncuesta'              => $enc['nameEncuesta'] ,
+        'select_largo_encuesta'     => $enc['select_largo_encuesta'] ,
+        'preguntaText'              => $enc["preguntaText".( $i + 1 )] ,
+        'largoRespuesta'            => $enc["largoRespuesta".( $i + 1 )],
+        'select_largo_encuesta_old' => $enc['select_largo_encuesta_old']
+      );
+    }
+  }
+
 
 
 }
