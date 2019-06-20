@@ -15,4 +15,15 @@ class Preguntas{
     return $result ;
   }
 
+  public function DeletePregunta( $id_encuesta )
+  {
+    $this->db->query( 'DELETE FROM preguntas WHERE id_encuesta=:id_encuesta' );
+    $this->db->bind(':id_encuesta' , $id_encuesta ) ;
+
+    if ( $this->db->execute() ) {
+          return true ;
+    }
+    return false ;
+  }
+
 }

@@ -70,6 +70,7 @@
             </div>
             <div class="form-group" id="input">
               <input type="text" id="largoEncuestaTemporal" name="" style="display:none;" value="">
+              <input type="text" id="idEncuestaForm" name="idEncuestaForm" style="display:none;" value="">
               <div class="input-group mb-3">
                 <input type="number" id="inputAddEncuesta" onkeyup="this.value = bloquearCaracteres( this.value )" class="form-control" placeholder="Agregar o quitar respuestas" aria-label="Recipient's username with two button addons" aria-describedby="button-addon4">
                 <div class="input-group-append" id="button-addon4">

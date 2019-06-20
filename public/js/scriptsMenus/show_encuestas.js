@@ -141,10 +141,6 @@ window.addEventListener('load', function(){
       return false;
     }
 
-    console.log( 'largoEncuestaTemporal: ' + largoEncuestaTemporal );
-    console.log( 'largoTotalRestado: ' + largoTotalRestado );
-    console.log('______________________');
-
     if( largoTotalRestado < 0 ){
       document.querySelector('#messageAlertAddEncuesta').style.display = 'block' ;
       setTimeout( function(){ document.querySelector('#messageAlertAddEncuesta').style.display = 'none'; } , 5000 );
@@ -245,6 +241,7 @@ function createInputs( i ){
     <input type="text" id="preguntaText${i}" name="preguntaText${i}"  class="form-control"/>
     <p id="messageResponsePregunta${i}" style="display:none;color:red;">Debe agregar una pregunta.</p>
   </div>
+
   <div class="form-group" id="form-respuesta${i}">
     <p>Cantidad Respuestas</p>
     <select id="largoRespuesta${i}" name="largoRespuesta${i}"  class="form-control">
@@ -291,9 +288,13 @@ function GetEncuesta( idEncuesta )
     console.log( data.encuestaPregunta ) ;
     instanceInputs( largoEncuesta ) ;
     input.style.display = 'none';
+
+    document.querySelector('#idEncuestaForm').value = data.encuestaResponse.id_encuesta ;
+
     for ( var i = 0 ; i < largoEncuesta ; i++ ) {
       document.querySelector('#preguntaText' + ( i + 1 ) ).value = data.encuestaPregunta[i].name_pregunta ;
       document.querySelector('#largoRespuesta' + ( i + 1 ) ).selectedIndex = parseInt(data.encuestaPregunta[i].largo_pregunta) - 1  ;
+      document.querySelector('#idPregunta' + ( i + 1 ) ).value = data.encuestaPregunta[i].id_pregunta  ;
     }
     if( largoEncuesta < 1 ){
       disableElement('btnDeleteEncuesta') ;

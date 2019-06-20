@@ -129,9 +129,10 @@ Class Encuestascontroller extends Controlador{
         'selectTipoEncuesta'        => $arr['selectTipoEncuesta'] ,
         'nameEncuesta'              => $arr['nameEncuesta'] ,
         'select_largo_encuesta'     => $arr['select_largo_encuesta'] ,
+        'select_largo_encuesta_old' => $arr['select_largo_encuesta_old'],
+        'idEncuestaForm'            => $arr['idEncuestaForm'],
         'preguntaText'              => $arr["preguntaText".( $i + 1 )] ,
-        'largoRespuesta'            => $arr["largoRespuesta".( $i + 1 )],
-        'select_largo_encuesta_old' => $arr['select_largo_encuesta_old']
+        'largoRespuesta'            => $arr["largoRespuesta".( $i + 1 )]
       );
     }
     return $encuestaTotal ;
@@ -140,12 +141,13 @@ Class Encuestascontroller extends Controlador{
   public function actualizarEncuesta()
   {
     $post = $this->ArrayOrderUpdate( $_POST ) ;
-    var_dump( $post ) ;
-    $encuestasInsertar = array();
-    $encuestasActualizar = array();
+    var_dump( $post[0] ) ;
+    extract( $post[0] ) ;
+    die();
+
+    $this->pregunta->DeletePregunta( (int) $idEncuestaForm ) ;
     //separo en dos array uno para Actualizar y otro para isertar
     for ( $i = 0; $i < count( $post ) ; $i++ ) {
-
       $encuestasActualizar [] =  array(
         'selectTipoEncuesta'        => $enc['selectTipoEncuesta'] ,
         'nameEncuesta'              => $enc['nameEncuesta'] ,
@@ -156,6 +158,7 @@ Class Encuestascontroller extends Controlador{
       );
     }
   }
+
 
 
 
