@@ -141,22 +141,47 @@ Class Encuestascontroller extends Controlador{
   public function actualizarEncuesta()
   {
     $post = $this->ArrayOrderUpdate( $_POST ) ;
-    var_dump( $post[0] ) ;
     extract( $post[0] ) ;
-    die();
 
-    $this->pregunta->DeletePregunta( (int) $idEncuestaForm ) ;
-    //separo en dos array uno para Actualizar y otro para isertar
-    for ( $i = 0; $i < count( $post ) ; $i++ ) {
-      $encuestasActualizar [] =  array(
-        'selectTipoEncuesta'        => $enc['selectTipoEncuesta'] ,
-        'nameEncuesta'              => $enc['nameEncuesta'] ,
-        'select_largo_encuesta'     => $enc['select_largo_encuesta'] ,
-        'preguntaText'              => $enc["preguntaText".( $i + 1 )] ,
-        'largoRespuesta'            => $enc["largoRespuesta".( $i + 1 )],
-        'select_largo_encuesta_old' => $enc['select_largo_encuesta_old']
+    $responsePregunta = $this->pregunta->DeletePregunta( (int) $idEncuestaForm ) ;
+    if( !$responsePregunta ){
+      $data = array(
+          'response'  => false ,
+          'message' 	=> 'Error with delete pregunstas to table preguntas.'
       );
+      echo json_encode( $data , JSON_FORCE_OBJECT ) ;
+      return false ;
     }
+
+    for ( $i = 0; $i < count( $post ) ; $i++ ) {
+      $res = $this->encuesta->AddRespuesta( (int) $post[$i]['idEncuestaForm'] , $post[$i]['preguntaText'] , (int) $post[$i]['largoRespuesta'] );
+      if ( $res == false ){
+
+        $data = array(
+            'response'  => false ,
+            'message' 	=> 'Error with insert pregunstas to table pregunstas.'
+        );
+        echo json_encode( $data , JSON_FORCE_OBJECT ) ;
+        return false ;
+      }
+    }
+
+    $responseUpdate = $this->encuesta->UpdateEncuesta( (int) $post[0]['idEncuestaForm'] , (int) $selectTipoEncuesta , $nameEncuesta , (int) $select_largo_encuesta ) ;
+
+    if( !$responseUpdate ){
+      $data = array(
+          'response'  => false ,
+          'message' 	=> 'Error with update ecnuestas to table preguntas.'
+      );
+      echo json_encode( $data , JSON_FORCE_OBJECT ) ;
+      return false ;
+    }
+
+    $data = array(
+        'response'  => true ,
+        'message' 	=> 'La Encuesta fue actualizada con exito.'
+    );
+    echo json_encode( $data , JSON_FORCE_OBJECT ) ;
   }
 
 

@@ -41,6 +41,7 @@ window.addEventListener('load', function(){
             })
             .then( res 	=> res.json() )
             .then( data => {
+              console.log( data );
               document.querySelector('#id_encuesta_'+ data.id_encuesta).remove();
               toastr.info('La encuesta fue borrada con éxito.');  //respuesta ajax
             })
@@ -163,7 +164,7 @@ window.addEventListener('load', function(){
     }
   });
   document.querySelector('#btnEncuestaForm').addEventListener( 'click' , function(e){
-    //this.style.display = 'none';
+    this.style.display = 'none';
     e.preventDefault();
     var nameEncuesta  = document.querySelector('#nameEncuesta') ;
     var selectTipoEncuesta  = document.querySelector('#selectTipoEncuesta') ;
@@ -197,15 +198,22 @@ window.addEventListener('load', function(){
     var form = new FormData( formEditEncuesta ) ;
 
     url = formEditEncuesta.getAttribute('action') ; //obtiene el atributo action;
-    console.log( url );
 
     fetch( url ,{
       method : 'POST',
       body   : form
     })
-    .then( res  => res.text() )
+    .then( res  => res.json() )
     .then( data => {
+      this.style.display = 'block';
       console.log( data ) ;
+
+      if(data.response != true){
+          document.querySelector('.messa_response_fail_encuesta').style.display = 'block' ;
+          setTimeout( function(){ document.querySelector('.messa_response_fail_encuesta').style.display = 'none' ; } , 4000 );
+          return
+      }
+      toastr.info('La encuesta fue actualizada con éxito.');
     })
   });
 
@@ -294,7 +302,6 @@ function GetEncuesta( idEncuesta )
     for ( var i = 0 ; i < largoEncuesta ; i++ ) {
       document.querySelector('#preguntaText' + ( i + 1 ) ).value = data.encuestaPregunta[i].name_pregunta ;
       document.querySelector('#largoRespuesta' + ( i + 1 ) ).selectedIndex = parseInt(data.encuestaPregunta[i].largo_pregunta) - 1  ;
-      document.querySelector('#idPregunta' + ( i + 1 ) ).value = data.encuestaPregunta[i].id_pregunta  ;
     }
     if( largoEncuesta < 1 ){
       disableElement('btnDeleteEncuesta') ;

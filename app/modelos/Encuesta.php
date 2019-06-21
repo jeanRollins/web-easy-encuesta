@@ -82,6 +82,20 @@ class Encuesta {
     return false ;
   }
 
+  public function UpdateEncuesta( $idEncuesta , $tipoEncuesta , $nameEncuesta , $largoEncuesta )
+  {
+    $this->db->query( 'UPDATE encuestas SET  tipo_encuesta=:tipo_encuesta , name_encuesta=:name_encuesta , largo_encuesta=:largo_encuesta WHERE id_encuesta=:id_encuesta' );
+    $this->db->bind(':id_encuesta'    , $idEncuesta    ) ;
+    $this->db->bind(':tipo_encuesta'  , $tipoEncuesta  ) ;
+    $this->db->bind(':name_encuesta'  , $nameEncuesta  ) ;
+    $this->db->bind(':largo_encuesta' , $largoEncuesta ) ;
+
+    if ( $this->db->execute() ) {
+          return true ;
+    }
+    return false ;
+  }
+
 }
 
 
