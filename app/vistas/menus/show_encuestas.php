@@ -28,6 +28,8 @@
               <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                 <a class="dropdown-item btnGroupDrop editarEncuesta" data-id='<?php echo $encuesta->id_encuesta ;?>' href="#">Actualizar</a>
                 <a class="dropdown-item deleteEncuestaClass" data-id='<?php echo $encuesta->id_encuesta ;?>' href="#">Borrar Encuesta</a>
+                <a type="button" class="dropdown-item btnModalEncuesta" data-toggle="modal" data-target="#exampleModal"  data-id_encuesta='<?php echo $encuesta->id_encuesta ;?>' href="#">Detalle Encuesta</a>
+                <a class="dropdown-item" data-id='<?php echo $encuesta->id_encuesta ;?>' href="<?php echo RUTA_URL; ?>sessioncontroller/lanzadorencuesta?id_encuesta=<?php echo $encuesta->id_encuesta ;?>" >Ir a lanzador</a>
               </div>
             </div>
           </td>
@@ -36,6 +38,34 @@
     </tbody>
   </table>
 </div>
+<!--   Modal Start   -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="idModalEncuesta" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalEncuesta"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="tipo_encuesta"></p>
+        <p id="update_encuesta"></p>
+        <p id="create_encuesta"></p>
+        <p id="largoEncuestaForm"></p>
+        <div id="container_preguntas_encuestas">
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--   Modal end   -->
 
 <div class="" id="formEncuestaEdit" style="display:none;">
   <form id="formEditEncuesta" action="<?php echo RUTA_URL; ?>encuestascontroller/actualizarEncuesta" method="POST">

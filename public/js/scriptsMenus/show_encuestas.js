@@ -35,7 +35,6 @@ window.addEventListener('load', function(){
               return ;
             }
             var url = 'http://localhost/encuestas-web/encuestascontroller/deleteencuesta?id_encuesta=' + idEncuesta ;
-            console.log( url );
             fetch( url ,{  //url de la ruta para enviar ajax
               method 	: 'GET' , // metodo de envio POST,GET,PUT, etc.
             })
@@ -217,6 +216,14 @@ window.addEventListener('load', function(){
     })
   });
 
+  const btnModalEncuesta = document.querySelectorAll(".btnModalEncuesta");
+  for (const button of btnModalEncuesta) {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      GetDetalleEncuesta( this.dataset.id_encuesta );
+    });
+  }
+
 });
 
 function disableElement( element ){
@@ -345,6 +352,8 @@ function ListarEncuestas( data )
      tableBody += "<div class='dropdown-menu' aria-labelledby='btnGroupDrop1'>"; //data[encuesta].id_encuesta
      tableBody += "<a class='dropdown-item editarEncuesta' data-id='" + data[encuesta].id_encuesta + "'  href='#'>Actualizar Encuesta</a>" ;
      tableBody += "<a class='dropdown-item deleteEncuestaClass' data-id='" + data[encuesta].id_encuesta + "'  href='#'>Borrar Encuesta</a>" ;
+     tableBody += "<a class='dropdown-item'  href='#'>Borrar Encuesta</a>" ;
+
      tableBody += "</div></div>";
      tableBody += "</td></tr>";
      count = count + 1 ;
@@ -361,4 +370,45 @@ function bloquearCaracteres(string){
        if (filtro.indexOf(string.charAt(i)) != -1)
 	     out += string.charAt(i);
     return out;
+}
+ //
+function GetDetalleEncuesta( idEncuesta ){
+  url = 'http://localhost/encuestas-web/encuestascontroller/GetDetalleEncuesta?id_encuesta=' + idEncuesta ;
+  fetch( url ,{
+    method 	: 'GET' ,
+  })
+  .then( res 	=> res.json() )
+  .then( data => {
+    printEncuestaModal( data );
+  })
+}
+
+function printEncuestaModal( data ){
+  console.log( data );
+  var pregunta = '';
+  largo = parseInt( data[0].largo_encuesta )  ;
+  document.querySelector('#titleModalEncuesta').innerHTML = data[0].name_encuesta ;
+  document.querySelector('#tipo_encuesta').innerHTML = 'Tipo Encuesta : ' + data[0].name_tipo ;
+  document.querySelector('#update_encuesta').innerHTML = 'Última actulización  : ' + data[0].update_encuesta ;
+  document.querySelector('#create_encuesta').innerHTML = 'Fecha Creación : ' + data[0].create_encuesta ;
+  document.querySelector('#largoEncuestaForm').innerHTML = 'Cantidad Preguntas : ' + largo ;
+  //document.querySelector('#container_preguntas_encuestas').innerHTML =
+  console.log(largo);
+
+  pregunta += "<table class='table table-hover'><thead>";
+  pregunta += "<tr><td> Preguntas";
+  pregunta += "</td><td>Cantidad respuestas";
+  pregunta += "</td></tr>";
+  pregunta += "</thead>";
+  pregunta += "<tbody>";
+
+  for (var i = 0 ; i < largo ; i++) {
+      console.log( data[i].name_pregunta ) ;
+      pregunta += "<tr><td>" + data[i].name_pregunta ;
+      pregunta += "</td><td>" +   data[i].largo_pregunta;
+      pregunta += "</td></tr>";
+  }
+  pregunta += "</tbody>";
+  pregunta += "</table>";
+  document.querySelector('#container_preguntas_encuestas').innerHTML = pregunta ;
 }

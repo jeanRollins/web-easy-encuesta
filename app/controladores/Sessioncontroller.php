@@ -6,6 +6,7 @@ class Sessioncontroller extends  Controlador{
   public function __construct()
   {
     $this->encuesta = $this->cargaModelo('Encuesta') ;
+    $this->user = $this->cargaModelo('Usuario') ;
   }
 
   public function loguot()
@@ -36,6 +37,13 @@ class Sessioncontroller extends  Controlador{
     $this->cargaVista('paginas/showencuestas' , $encuestasArray ) ;
   }
 
+  public function lanzadorencuesta()
+  {
+    $this->ValidateSession( $_SESSION ) ;
+    $encuestas = $this->user->GetUserStudyData() ;
+    $this->cargaVista('paginas/lanzadorencuesta' , $encuestas ) ;
+  }
+  
 
 
 }

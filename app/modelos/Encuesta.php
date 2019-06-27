@@ -96,6 +96,44 @@ class Encuesta {
     return false ;
   }
 
+  public function GetPreguntaRespuesta( $id_encuesta )
+  {
+    $this->db->query( "SELECT e.id_encuesta , e.name_encuesta , te.name_tipo , e.largo_encuesta , e.update_encuesta , p.largo_pregunta , e.create_encuesta , p.id_pregunta , p.name_pregunta
+                        FROM encuestas e
+                        INNER JOIN preguntas p ON e.id_encuesta = p.id_encuesta
+                        INNER JOIN tipo_encuesta te ON te.id_tipo = e.tipo_encuesta
+                        WHERE e.id_encuesta = :id_encuesta
+                        ORDER BY e.update_encuesta  DESC  ;	" );
+
+    $this->db->bind(':id_encuesta' , $id_encuesta ) ;
+
+    $result = $this->db->getRegistersBd() ;
+    return $result ;
+
+  }
+
+  public function GetPreguntasRespuestas( )
+  {
+    $this->db->query( "SELECT e.id_encuesta , e.name_encuesta , te.name_tipo , e.largo_encuesta , e.update_encuesta ,p.id_pregunta , p.name_pregunta
+                        FROM encuestas e
+                        INNER JOIN preguntas p ON e.id_encuesta = p.id_encuesta
+                        INNER JOIN tipo_encuesta te ON te.id_tipo = e.tipo_encuesta
+                        ORDER BY e.update_encuesta  DESC  ;	" );
+    $result = $this->db->getRegistersBd() ;
+    return $result ;
+  }
+
+  public function GetIdPreguntas( $id_encuesta )
+  {
+    $this->db->query( "SELECT id_pregunta FROM preguntas WHERE id_encuesta=:id_encuesta" ) ;
+    $this->db->bind(':id_encuesta' , $id_encuesta ) ;
+
+    if ( $this->db->execute() ) {
+          return true ;
+    }
+    return false ;
+  }
+
 }
 
 

@@ -4,8 +4,9 @@ Class Encuestascontroller extends Controlador{
 
   public function __construct()
   {
-    $this->encuesta = $this->cargaModelo('Encuesta') ;
+    $this->encuesta = $this->cargaModelo('Encuesta')  ;
     $this->pregunta = $this->cargaModelo('Preguntas') ;
+    $this->User     = $this->cargaModelo('Usuario')   ;
   }
 
   public function addEncuesta(){
@@ -184,7 +185,23 @@ Class Encuestascontroller extends Controlador{
     echo json_encode( $data , JSON_FORCE_OBJECT ) ;
   }
 
+  public function GetDetalleEncuesta(){
+    extract( $_GET ) ;
+    $encuestaRespuestas = $this->encuesta->GetPreguntaRespuesta( (int)$id_encuesta ) ;
+    echo json_encode( $encuestaRespuestas , JSON_FORCE_OBJECT ) ;
+  }
 
+  public function LanzarEncuesta(){
+    extract( $_POST ) ;
+    $rutUsers = explode( ',' , $dataRut ) ;
+
+    foreach ( $rutUsers as $key ) {
+      // code...
+    }
+
+    //$response = $this->User->AddUserRespuestas( $rut , $id_encuesta , $id_pregunta ) ;
+
+  }
 
 
 }
