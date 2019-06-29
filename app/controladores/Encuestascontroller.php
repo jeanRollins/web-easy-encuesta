@@ -191,14 +191,32 @@ Class Encuestascontroller extends Controlador{
     echo json_encode( $encuestaRespuestas , JSON_FORCE_OBJECT ) ;
   }
 
+  private function OrderLanzarEncuesta( $rutUsers , $idEncuesta , $idPreguntasEncuestas ){
+    for ( $i = 0 ; $i < count( $rutUsers ) ; $i++ ) {
+      for ( $j = 0 ; $j < count( $idPreguntasEncuestas ) ; $j++) {
+        $encuestaTotal[] = array(
+            'rut'                    =>  $rutUsers[$i] ,
+            'idEncuesta'             =>  $idEncuesta   ,
+            'idPreguntasEncuestas'   =>  $idPreguntasEncuestas[$j]->id_pregunta
+        );
+      }
+    }
+    return $encuestaTotal ;
+  }
+
   public function LanzarEncuesta(){
     extract( $_POST ) ;
     $rutUsers = explode( ',' , $dataRut ) ;
+    $idPreguntasEncuestas = $this->encuesta->GetIdPreguntas( $id_encuesta ) ;
+    $responseOrderLanzarEncuesta = $this->OrderLanzarEncuesta( $rutUsers , $id_encuesta , $idPreguntasEncuestas ) ;
 
-    foreach ( $rutUsers as $key ) {
-      // code...
+    foreach ( $responseOrderLanzarEncuesta as $encuestaData ) {
+      $response = $this->User->AddUserRespuestas( $encuestaData['rut'] , (int)$encuestaData['idEncuesta'] , (int) $encuestaData['idPreguntasEncuestas'] ) ;
+      if( !$response ){
+        break ; echo 'false' ; return ;
+      }
     }
-
+    echo 'true' ;
     //$response = $this->User->AddUserRespuestas( $rut , $id_encuesta , $id_pregunta ) ;
 
   }

@@ -4,7 +4,7 @@
 
 define('DB_HOST','159.89.234.119');
 define('DB_USUARIO','develop');
-define('DB_PASSWORD', '8899') ;
+define('DB_PASSWORD', '') ;
 define('DB_NOMBRE','easy_encuesta');
 
  //Rutas de la aplicacion

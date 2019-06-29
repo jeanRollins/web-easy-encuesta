@@ -128,10 +128,8 @@ class Encuesta {
     $this->db->query( "SELECT id_pregunta FROM preguntas WHERE id_encuesta=:id_encuesta" ) ;
     $this->db->bind(':id_encuesta' , $id_encuesta ) ;
 
-    if ( $this->db->execute() ) {
-          return true ;
-    }
-    return false ;
+    $result = $this->db->getRegistersBd() ;
+    return $result ;
   }
 
 }
