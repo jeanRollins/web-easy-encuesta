@@ -217,8 +217,6 @@ Class Encuestascontroller extends Controlador{
       }
     }
     echo 'true' ;
-    //$response = $this->User->AddUserRespuestas( $rut , $id_encuesta , $id_pregunta ) ;
-
   }
 
 

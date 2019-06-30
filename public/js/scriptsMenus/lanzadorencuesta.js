@@ -57,7 +57,6 @@ window.addEventListener( 'load' , function() {
             console.log( 'false' ) ;
             return ;
           }
-
           var url = 'http://localhost/encuestas-web/encuestascontroller/LanzarEncuesta' ;
           fetch( url ,{
             method : 'POST' ,
@@ -66,9 +65,12 @@ window.addEventListener( 'load' , function() {
           .then( res 	=> res.text() )
           .then( data => {
             console.log( data );
-            //toastr.info('La encuesta fue borrada con éxito.');  //respuesta ajax
+            if( data === 'true' ){
+              toastr.error('La encuesta no se pudo lanzar, recargue y vuelva a intentar.');
+              return ;
+            }
+            toastr.info('La encuesta fue lanzada con éxito.') ;
           })
-
         }
     });
 

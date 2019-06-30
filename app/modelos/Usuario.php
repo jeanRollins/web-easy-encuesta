@@ -60,7 +60,7 @@ class Usuario{
   {
     $this->db->query( "INSERT INTO user_respuestas ( rut , id_encuesta , id_pregunta , id_respuesta , status )
                        VALUES
-                      ( ':rut' , ':id_encuesta' , ':id_pregunta' , 'id_respuesta' , ':status' );" ) ;
+                      ( :rut , :id_encuesta , :id_pregunta , :id_respuesta , :status );" ) ;
 
     $this->db->bind( ':rut'          , $rut  ) ;
     $this->db->bind( ':id_encuesta'  , $id_encuesta  ) ;
